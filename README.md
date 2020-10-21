@@ -6,3 +6,5 @@
 
 # REQUIREMENTS:
  PyGame needed.
+
+*Note that **.sb2** file is not part of the game and is only for reference.
