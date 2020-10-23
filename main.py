@@ -34,6 +34,27 @@ class Player(pygame.sprite.Sprite):
             return True
         else:
             return False
+    def check_lock(self):
+        if lock_active:
+            if level_four:
+                collided = pygame.sprite.spritecollide(player, level_four_lock_group, False)
+            else:
+                collided = None
+        else:
+            collided = None
+        if collided:
+            return True
+        else:
+            return False
+    def check_key(self):
+        if level_four:
+            collided = pygame.sprite.spritecollide(player, level_four_key_group, False)
+        else:
+            collided = None
+        if collided:
+            return True
+        else:
+            return False
         
 class Obstacle(pygame.sprite.Sprite):
     def __init__(self, width, height, pos_x, pos_y, color):
@@ -42,12 +63,12 @@ class Obstacle(pygame.sprite.Sprite):
         self.image.fill(color)
         self.rect = self.image.get_rect(topleft = (pos_x, pos_y))
 
-class Key(pygame.sprite.Sprite):
-    def __init__(self, width, height, pos_x, pos_y, color):
-        super().__init__()
-        self.image = pygame.Surface([width, height])
-        self.image.fill(color)
-        self.rect = self.image.get_rect(topleft = (pos_x, pos_y))
+# class Key(pygame.sprite.Sprite):
+#     def __init__(self, width, height, pos_x, pos_y, color):
+#         super().__init__()
+#         self.image = pygame.Surface([width, height])
+#         self.image.fill(color)
+#         self.rect = self.image.get_rect(topleft = (pos_x, pos_y))
 
 pygame.init()
 clock = pygame.time.Clock()
@@ -67,9 +88,10 @@ width = 70
 height = width
 YELLOW = (254, 235, 1)
 SCREEN_BG = (0, 255, 255)
-level_one = True
+level_one = False
 level_two = False
 level_three = False
+level_four = True
 end_screen = False
 
 #Player
@@ -119,6 +141,13 @@ level_two_checkpoint_group.add(level_two_checkpoint)
 level_three_checkpoint = Obstacle(100, 150, 600, 0, (0, 255, 0))
 level_three_checkpoint_group.add(level_three_checkpoint)
 
+#Keys
+lock_active = True
+level_four_key_group = pygame.sprite.Group()
+
+level_four_key = Obstacle(30, 30, 50, 50, (255, 0, 255))
+level_four_key_group.add(level_four_key)
+
 #===========================================================
 
 while run:
@@ -138,6 +167,11 @@ while run:
 
     if x < 0 or x + width > SCREEN_WIDTH or y < 0 or y + height > SCREEN_HEIGHT:
         x, y = 0, 530
+    #Locks
+    if lock_active:
+        level_four_lock_group = pygame.sprite.Group()
+        level_four_lock = Obstacle(50, 100, 400, 0, (0, 0, 255))
+        level_four_lock_group.add(level_four_lock)
 
     if not end_screen:
         screen.fill(SCREEN_BG)
@@ -153,17 +187,22 @@ while run:
     
     if level_one:
         level_one_obstacles.draw(screen)
-        level_one_checkpoint_group.draw(screen)
-        
+        level_one_checkpoint_group.draw(screen) 
     elif level_two:
         level_two_obstacles.draw(screen)
         level_two_checkpoint_group.draw(screen)
     elif level_three:
         level_three_obstacles.draw(screen)
         level_three_checkpoint_group.draw(screen)
+    elif level_four:
+        if lock_active:
+            level_four_lock_group.draw(screen)
+            level_four_key_group.draw(screen)
         
     check = player.check()
     check_checkpoint = player.check_checkpoint()
+    check_lock = player.check_lock()
+    check_key = player.check_key()
     if check == True:
         x, y = 0, 530
     if check_checkpoint == True:
@@ -173,11 +212,19 @@ while run:
             x, y = 0, 530
         elif level_two:
             level_two = False
-            level_three = True #Change this when more levels added
+            level_three = True #Change this when more levels added (this is note to self)
             x, y = 0, 530
         elif level_three:
             level_three = False
-            end_screen = True
+            level_four = True
+            x, y = 0, 530
+        elif level_four:
+            level_four = False
+            end_screen = True #Note to self: add "lock_active = True" here when level 5 is made.
+    if check_lock == True:
+        x, y = 0, 530
+    if check_key == True:
+        lock_active = False
             
     pygame.display.flip()
     clock.tick(60)
