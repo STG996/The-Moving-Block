@@ -15,6 +15,8 @@ class Player(pygame.sprite.Sprite):
             collided = pygame.sprite.spritecollide(player, level_two_obstacles, False)
         elif level_three:
             collided = pygame.sprite.spritecollide(player, level_three_obstacles, False)
+        elif level_four:
+            collided = pygame.sprite.spritecollide(player, level_four_obstacles, False)
         else:
             collided = None
         if collided:
@@ -28,6 +30,8 @@ class Player(pygame.sprite.Sprite):
             collided = pygame.sprite.spritecollide(player, level_two_checkpoint_group, False)
         elif level_three:
             collided = pygame.sprite.spritecollide(player, level_three_checkpoint_group, False)
+        elif level_four:
+            collided = pygame.sprite.spritecollide(player, level_four_checkpoint_group, False)
         else:
             collided = None
         if collided:
@@ -81,10 +85,10 @@ width = 70
 height = width
 YELLOW = (254, 235, 1)
 SCREEN_BG = (0, 255, 255)
-level_one = True
+level_one = False
 level_two = False
 level_three = False
-level_four = False
+level_four = True
 end_screen = False
 
 #Player
@@ -98,6 +102,7 @@ player_group.add(player)
 level_one_obstacles = pygame.sprite.Group()
 level_two_obstacles = pygame.sprite.Group()
 level_three_obstacles = pygame.sprite.Group()
+level_four_obstacles = pygame.sprite.Group()
 
 level_one_obstacle_one = Obstacle(500, 125, 0, 0, (255, 0, 0))
 level_one_obstacles.add(level_one_obstacle_one)
@@ -120,10 +125,18 @@ level_three_obstacles.add(level_three_obstacle_two)
 level_three_obstacle_three = Obstacle(100, 200, 500, 200, (255, 0, 0))
 level_three_obstacles.add(level_three_obstacle_three)
 
+level_four_obstacle_one = Obstacle(150, 100, 0, 100, (255, 0, 0))
+level_four_obstacles.add(level_four_obstacle_one)
+level_four_obstacle_two = Obstacle(200, 150, 200, 500, (255, 0, 0))
+level_four_obstacles.add(level_four_obstacle_two)
+level_four_obstacle_three = Obstacle(75, 250, 400, 0, (255, 0, 0))
+level_four_obstacles.add(level_four_obstacle_three)
+
 #Checkpoints
 level_one_checkpoint_group = pygame.sprite.Group()
 level_two_checkpoint_group = pygame.sprite.Group()
 level_three_checkpoint_group = pygame.sprite.Group()
+level_four_checkpoint_group = pygame.sprite.Group()
 
 level_one_checkpoint = Obstacle(200, 100, 500, 0, (0, 255, 0))
 level_one_checkpoint_group.add(level_one_checkpoint)
@@ -134,11 +147,14 @@ level_two_checkpoint_group.add(level_two_checkpoint)
 level_three_checkpoint = Obstacle(100, 150, 600, 0, (0, 255, 0))
 level_three_checkpoint_group.add(level_three_checkpoint)
 
+level_four_checkpoint = Obstacle(225, 75, 475, 0, (0, 255, 0))
+level_four_checkpoint_group.add(level_four_checkpoint)
+
 #Keys
 lock_active = True
 level_four_key_group = pygame.sprite.Group()
 
-level_four_key = Obstacle(30, 30, 50, 50, (255, 0, 255))
+level_four_key = Obstacle(30, 30, 50, 30, (255, 0, 255))
 level_four_key_group.add(level_four_key)
 
 #===========================================================
@@ -163,7 +179,7 @@ while run:
     #Locks
     if lock_active:
         level_four_lock_group = pygame.sprite.Group()
-        level_four_lock = Obstacle(50, 100, 400, 0, (0, 0, 255))
+        level_four_lock = Obstacle(250, 100, 450, 150, (0, 0, 255))
         level_four_lock_group.add(level_four_lock)
 
     if not end_screen:
@@ -191,7 +207,9 @@ while run:
         if lock_active:
             level_four_lock_group.draw(screen)
             level_four_key_group.draw(screen)
-        
+        level_four_obstacles.draw(screen)
+        level_four_checkpoint_group.draw(screen)
+               
     check = player.check()
     check_checkpoint = player.check_checkpoint()
     check_lock = player.check_lock()
