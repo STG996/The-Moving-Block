@@ -85,10 +85,10 @@ width = 70
 height = width
 YELLOW = (254, 235, 1)
 SCREEN_BG = (0, 255, 255)
-level_one = False
+level_one = True
 level_two = False
 level_three = False
-level_four = True
+level_four = False
 end_screen = False
 
 #Player
