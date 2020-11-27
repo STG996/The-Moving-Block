@@ -162,9 +162,7 @@ level_four_key_group.add(level_four_key)
 while run:
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
-			exit_condition = input("Are you sure you'd like to leave? (y/n):\n")
-			if exit_condition == "y":
-				run = False
+			run = False
 
 	keys = pygame.key.get_pressed()
 	if keys[pygame.K_w]:
@@ -213,8 +211,8 @@ while run:
 		if lock_active:
 			level_four_lock_group.draw(screen)
 			level_four_key_group.draw(screen)
-			level_four_obstacles.draw(screen)
-			level_four_checkpoint_group.draw(screen)
+		level_four_obstacles.draw(screen)
+		level_four_checkpoint_group.draw(screen)
 
 	check = player.check()
 	check_checkpoint = player.check_checkpoint()
