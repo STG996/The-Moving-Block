@@ -1,4 +1,4 @@
-import pygame, sys
+import pygame
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, width, height, color):
@@ -245,4 +245,3 @@ while run:
 	clock.tick(60)
 
 pygame.quit()
-sys.exit()
